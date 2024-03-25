@@ -109,8 +109,8 @@ where
 	
 	client.import_notification_stream().for_each(move |n| {
 		// detect and log reorganizations.
-		info!(target: "substrate","n type = {}", std::any::type_name::<typeof(my_var)>());
-		info!{target: "substrate","N CONTAINS : {:#?}",n};
+		println!("n type = {}", std::any::type_name::<typeof(my_var)>());
+		println!{"N CONTAINS : {:#?}",n};
 		if let Some((ref last_num, ref last_hash)) = last_best {
 			if n.header.parent_hash() != last_hash && n.is_new_best {
 				let maybe_ancestor =
@@ -147,7 +147,7 @@ where
 			
 			info!(
 				target: "substrate",
-				"✨ ImportedX #{} ({})",
+				"✨ Imported #{} ({})",
 				Colour::White.bold().paint(format!("{}", n.header.number())),
 				n.hash,
 			);
