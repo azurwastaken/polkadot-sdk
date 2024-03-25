@@ -142,15 +142,15 @@ where
 			if last_blocks.len() > max_blocks_to_track {
 				last_blocks.pop_front();
 			}
-
+			
 			info!(
 				target: "substrate",
 				"✨ Imported #{} ({})",
 				Colour::White.bold().paint(format!("{}", n.header.number())),
 				n.hash,
 			);
+			println!{"N CONTAINS : {:?}",n};
 		}
-		println!{"N CONTAINS : {:?}",n};
 		future::ready(())
 	})
 }
