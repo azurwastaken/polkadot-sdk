@@ -109,6 +109,7 @@ where
 
 	client.import_notification_stream().for_each(move |n| {
 		// detect and log reorganizations.
+		println!{"{:?}",n};
 		if let Some((ref last_num, ref last_hash)) = last_best {
 			if n.header.parent_hash() != last_hash && n.is_new_best {
 				let maybe_ancestor =
