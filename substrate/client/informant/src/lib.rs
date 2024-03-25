@@ -106,9 +106,11 @@ where
 	// Hashes of the last blocks we have seen at import.
 	let mut last_blocks = VecDeque::new();
 	let max_blocks_to_track = 100;
-
+	
 	client.import_notification_stream().for_each(move |n| {
 		// detect and log reorganizations.
+		println!("n type = {}", std::any::type_name::<typeof(my_var)>());
+		println!{"N CONTAINS : {:#?}",n};
 		if let Some((ref last_num, ref last_hash)) = last_best {
 			if n.header.parent_hash() != last_hash && n.is_new_best {
 				let maybe_ancestor =
@@ -149,7 +151,6 @@ where
 				Colour::White.bold().paint(format!("{}", n.header.number())),
 				n.hash,
 			);
-			println!{"N CONTAINS : {:?}",n};
 		}
 		future::ready(())
 	})
