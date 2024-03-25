@@ -147,7 +147,7 @@ where
 			
 			info!(
 				target: "substrate",
-				"✨ Imported #{} ({})",
+				"✨ ImportedX #{} ({})",
 				Colour::White.bold().paint(format!("{}", n.header.number())),
 				n.hash,
 			);
