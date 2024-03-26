@@ -160,7 +160,7 @@ where
 			let mut found = None;
 
 			for log in digest.logs() {
-				let log = log.try_to::<Log>(digest_item_id);
+				let log = log.try_to(digest_item_id);
 				match (log, found.is_some()) {
 					(Some(_), true) => (),
 					(Some(log), false) => found = Some(log),
