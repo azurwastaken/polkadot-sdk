@@ -114,7 +114,7 @@ where
 	client.import_notification_stream().for_each(move |n| {
 		// detect and log reorganizations.
 		// println!("n type = {}", std::any::type_name::<typeof(n)>());
-		// println! {"N CONTAINS : {:#?}",n};
+		println! {"N CONTAINS : {:#?}",n};
 		if let Some((ref last_num, ref last_hash)) = last_best {
 			if n.header.parent_hash() != last_hash && n.is_new_best {
 				let maybe_ancestor =
@@ -151,21 +151,21 @@ where
 
 			// hash :
 			// recuperer le digest
-			const MADARA_ENGINE_ID: ConsensusEngineId = [b'm', b'a', b'd', b'a'];
+			// const MADARA_ENGINE_ID: ConsensusEngineId = [b'm', b'a', b'd', b'a'];
 
-			let mut digest = n.header.digest();
-			// refaire la fonction find_starknet_block de madara
-			let mut digest_item_id = OpaqueDigestItemId::Consensus(&MADARA_ENGINE_ID);
-			// let mut found;
+			// let mut digest = n.header.digest();
+			// // refaire la fonction find_starknet_block de madara
+			// let mut digest_item_id = OpaqueDigestItemId::Consensus(&MADARA_ENGINE_ID);
+			// // let mut found;
 
-			for log in digest.logs() {
-				let log: std::option::Option<T> = log.try_to(digest_item_id);
-				match (log) {
-					(Some(_)) => (),
-					(Some(log)) => println!("log = {:#?}", Some(log)),
-					(None) => (),
-				}
-			}
+			// for log in digest.logs() {
+			// 	let log: std::option::Option<T> = log.try_to(digest_item_id);
+			// 	match (log) {
+			// 		(Some(_)) => (),
+			// 		(Some(log)) => println!("log = {:#?}", Some(log)),
+			// 		(None) => (),
+			// 	}
+			// }
 
 			// let mut blockoss = found.ok_or(Err({}));
 			// println!("blockoss = {:#?}", blockoss);
