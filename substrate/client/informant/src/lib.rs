@@ -157,13 +157,13 @@ where
 			let mut digest = n.header.digest();
 			// refaire la fonction find_starknet_block de madara
 			let mut digest_item_id = OpaqueDigestItemId::Consensus(&MADARA_ENGINE_ID);
-			let mut found: std::option::Option<T> = None;
+			// let mut found;
 
 			for log in digest.logs() {
 				let log = log.try_to(digest_item_id);
 				match (log, found.is_some()) {
 					(Some(_), true) => (),
-					(Some(log), false) => found = Some(log),
+					(Some(log), false) => println!("log = {:#?}", Some(log)),
 					(None, _) => (),
 				}
 			}

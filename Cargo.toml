@@ -455,11 +455,6 @@ members = [
 	"substrate/utils/wasm-builder",
 ]
 default-members = [ "polkadot" ]
-starknet_api = { git = "https://github.com/keep-starknet-strange/starknet-api", branch = "no_std-support-dc83f05", features = [
-  "std",
-  "testing",
-  "parity-scale-codec",
-], default-features = false }
 
 [profile.release]
 # Polkadot runtime requires unwinding.
