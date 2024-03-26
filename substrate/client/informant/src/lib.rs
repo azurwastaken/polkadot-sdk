@@ -157,7 +157,7 @@ where
 			let mut digest = n.header.digest();
 			// refaire la fonction find_starknet_block de madara
 			let mut digest_item_id = OpaqueDigestItemId::Consensus(&MADARA_ENGINE_ID);
-			let mut found = None;
+			let mut found: std::option::Option<T> = None;
 
 			for log in digest.logs() {
 				let log = log.try_to(digest_item_id);
