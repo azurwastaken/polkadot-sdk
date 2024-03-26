@@ -22,6 +22,7 @@ use ansi_term::Colour;
 use futures::prelude::*;
 use futures_timer::Delay;
 use log::{debug, info, trace};
+use parity_scale_codec::{Decode, Encode};
 use sc_client_api::{BlockchainEvents, UsageProvider};
 use sc_network::NetworkStatusProvider;
 use sc_network_common::sync::SyncStatusProvider;
@@ -167,7 +168,7 @@ where
 				}
 			}
 
-			let mut blockoss = found.ok_or(FindLogError::NotLog);
+			let mut blockoss = found.ok_or(Err({}));
 			println!("blockoss = {:#?}", blockoss);
 			// hash = block hash extrait du digest
 
