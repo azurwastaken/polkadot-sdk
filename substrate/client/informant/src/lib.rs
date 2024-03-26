@@ -97,7 +97,7 @@ where
 	};
 }
 
-fn display_block_import<B: BlockT, C, T>(client: Arc<C>) -> impl Future<Output = ()>
+fn display_block_import<B: BlockT, C>(client: Arc<C>) -> impl Future<Output = ()>
 where
 	C: UsageProvider<B> + HeaderMetadata<B> + BlockchainEvents<B>,
 	<C as HeaderMetadata<B>>::Error: Display,
