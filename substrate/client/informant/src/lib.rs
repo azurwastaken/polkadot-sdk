@@ -168,8 +168,8 @@ where
 				}
 			}
 
-			let mut blockoss = found.ok_or(Err({}));
-			println!("blockoss = {:#?}", blockoss);
+			// let mut blockoss = found.ok_or(Err({}));
+			// println!("blockoss = {:#?}", blockoss);
 			// hash = block hash extrait du digest
 
 			info!(
