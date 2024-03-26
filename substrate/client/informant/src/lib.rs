@@ -22,7 +22,6 @@ use ansi_term::Colour;
 use futures::prelude::*;
 use futures_timer::Delay;
 use log::{debug, info, trace};
-use parity_scale_codec::{Decode, Encode};
 use sc_client_api::{BlockchainEvents, UsageProvider};
 use sc_network::NetworkStatusProvider;
 use sc_network_common::sync::SyncStatusProvider;
@@ -161,10 +160,10 @@ where
 
 			for log in digest.logs() {
 				let log = log.try_to(digest_item_id);
-				match (log, found.is_some()) {
-					(Some(_), true) => (),
-					(Some(log), false) => println!("log = {:#?}", Some(log)),
-					(None, _) => (),
+				match (log) {
+					(Some(_)) => (),
+					(Some(log)) => println!("log = {:#?}", Some(log)),
+					(None) => (),
 				}
 			}
 
