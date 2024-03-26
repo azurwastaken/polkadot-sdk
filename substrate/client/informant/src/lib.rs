@@ -106,11 +106,11 @@ where
 	// Hashes of the last blocks we have seen at import.
 	let mut last_blocks = VecDeque::new();
 	let max_blocks_to_track = 100;
-	
+
 	client.import_notification_stream().for_each(move |n| {
 		// detect and log reorganizations.
 		// println!("n type = {}", std::any::type_name::<typeof(n)>());
-		println!{"N CONTAINS : {:#?}",n};
+		// println! {"N CONTAINS : {:#?}",n};
 		if let Some((ref last_num, ref last_hash)) = last_best {
 			if n.header.parent_hash() != last_hash && n.is_new_best {
 				let maybe_ancestor =
@@ -144,12 +144,34 @@ where
 			if last_blocks.len() > max_blocks_to_track {
 				last_blocks.pop_front();
 			}
-			
+
+			// hash :
+			// recuperer le digest
+			const MADARA_ENGINE_ID: ConsensusEngineId = [b'm', b'a', b'd', b'a'];
+
+			let mut digest = n.header.digest();
+			// refaire la fonction find_starknet_block de madara
+			let mut digest_item_id = OpaqueDigestItemId::Consensus(&MADARA_ENGINE_ID);
+			let mut found = None;
+
+			for log in digest.logs() {
+				let log = log.try_to::<Log>(digest_item_id);
+				match (log, found.is_some()) {
+					(Some(_), true) => (),
+					(Some(log), false) => found = Some(log),
+					(None, _) => (),
+				}
+			}
+
+			let mut blockoss = found.ok_or(FindLogError::NotLog);
+			println!("blockoss = {:#?}", blockoss);
+			// hash = block hash extrait du digest
+
 			info!(
 				target: "substrate",
 				"✨ Imported #{} ({})",
 				Colour::White.bold().paint(format!("{}", n.header.number())),
-				n.hash,
+				n.hash, // recuperer ca du digest
 			);
 		}
 		future::ready(())
