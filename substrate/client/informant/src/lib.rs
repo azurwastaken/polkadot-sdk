@@ -159,7 +159,7 @@ where
 			// let mut found;
 
 			for log in digest.logs() {
-				let log = log.try_to(digest_item_id);
+				let log: std::option::Option<T> = log.try_to(digest_item_id);
 				match (log) {
 					(Some(_)) => (),
 					(Some(log)) => println!("log = {:#?}", Some(log)),
