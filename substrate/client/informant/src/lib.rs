@@ -26,7 +26,11 @@ use sc_client_api::{BlockchainEvents, UsageProvider};
 use sc_network::NetworkStatusProvider;
 use sc_network_common::sync::SyncStatusProvider;
 use sp_blockchain::HeaderMetadata;
-use sp_runtime::traits::{Block as BlockT, Header};
+use sp_runtime::{
+	generic::{Digest, OpaqueDigestItemId},
+	traits::{Block as BlockT, Header},
+	ConsensusEngineId,
+};
 use std::{collections::VecDeque, fmt::Display, sync::Arc, time::Duration};
 
 mod display;
