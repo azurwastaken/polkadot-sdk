@@ -160,14 +160,12 @@ where
 			println!("ITEM IN DIGEST :");
 			let mut nb = 0;
 			for item in digest {
-				println!("item {} : {:?}", nb, item);
+				println!("item {} : ", nb);
 				nb += 1;
 				// 	let log: std::option::Option<T> = log.try_to(digest_item_id);
-				// 	match (log) {
-				// 		(Some(_)) => (),
-				// 		(Some(log)) => println!("log = {:#?}", Some(log)),
-				// 		(None) => (),
-				// 	}
+				match (item) {
+					(DigestItem::Consensus(block)) => println!("log = {:?}", block),
+				}
 			}
 
 			// let mut blockoss = found.ok_or(Err({}));
