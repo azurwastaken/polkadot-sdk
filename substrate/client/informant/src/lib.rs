@@ -164,7 +164,8 @@ where
 				nb += 1;
 				// 	let log: std::option::Option<T> = log.try_to(digest_item_id);
 				match (item) {
-					(DigestItem::Consensus(block)) => println!("log = {:?}", block),
+					(DigestItem::Consensus(cons, block)) => println!("log = {:?}", block),
+					_ => {},
 				}
 			}
 
