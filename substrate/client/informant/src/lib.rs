@@ -29,7 +29,7 @@ use sp_blockchain::HeaderMetadata;
 use sp_runtime::{
 	generic::{Digest, OpaqueDigestItemId},
 	traits::{Block as BlockT, Header},
-	ConsensusEngineId,
+	ConsensusEngineId, DigestItem,
 };
 use std::{collections::VecDeque, fmt::Display, sync::Arc, time::Duration};
 
