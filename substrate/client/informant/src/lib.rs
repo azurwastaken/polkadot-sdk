@@ -158,8 +158,10 @@ where
 			// let mut digest_item_id = OpaqueDigestItemId::Consensus(&MADARA_ENGINE_ID);
 			// // let mut found;
 			println!("ITEM IN DIGEST :");
+			let mut nb = 0;
 			for item in digest {
-				println!("{:#?}", item);
+				println!("item {} : {:?}", nb, item);
+				nb += 1;
 				// 	let log: std::option::Option<T> = log.try_to(digest_item_id);
 				// 	match (log) {
 				// 		(Some(_)) => (),
