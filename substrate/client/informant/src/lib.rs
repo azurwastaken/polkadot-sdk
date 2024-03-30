@@ -98,7 +98,9 @@ where
 	};
 }
 
+#[derive(Clone, Debug)]
 pub struct StarkHash(pub [u8; 32]);
+#[derive(Clone, Debug)]
 pub struct ResourcePrice {
 	/// The price of one unit of the given resource, denominated in fri (10^-18 strk)
 	pub price_in_strk: Option<u64>,
@@ -190,7 +192,7 @@ where
 			// // let mut found;
 			println!("ITEM IN DIGEST :");
 			let mut nb = 0;
-			let mut starknet_block: Vec<u8>;
+			let mut starknet_block: Vec<u8> = [];
 			for item in digest {
 				println!("item {} : ", nb);
 				nb += 1;
