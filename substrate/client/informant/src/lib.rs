@@ -104,7 +104,7 @@ pub struct ResourcePrice {
 	/// The price of one unit of the given resource, denominated in wei
 	pub price_in_wei: u128,
 }
-pub struct Header {
+pub struct StarknetHeader {
 	/// The hash of this block’s parent.
 	pub parent_block_hash: StarkHash,
 	/// The number (height) of this block.
@@ -230,7 +230,7 @@ where
 			let l1_gas_price = ResourcePrice { price_in_strk, price_in_wei };
 			let extra_data = None;
 
-			let mut header = Header {
+			let mut header = StarknetHeader {
 				parent_block_hash,
 				block_number,
 				sequencer_address,
