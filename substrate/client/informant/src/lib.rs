@@ -97,6 +97,34 @@ where
 	};
 }
 
+pub struct StarkHash(pub [u8; 32]);
+pub struct ResourcePrice {
+	/// The price of one unit of the given resource, denominated in fri (10^-18 strk)
+	pub price_in_strk: Option<u64>,
+	/// The price of one unit of the given resource, denominated in wei
+	pub price_in_wei: u128,
+}
+pub struct Header {
+	/// The hash of this block’s parent.
+	pub parent_block_hash: StarkHash,
+	/// The number (height) of this block.
+	pub block_number: u64,
+	/// The Starknet address of the sequencer who created this block.
+	pub sequencer_address: StarkHash,
+	/// The time the sequencer created this block before executing transactions
+	pub block_timestamp: u64,
+	/// The number of transactions in a block
+	pub transaction_count: u128,
+	/// The number of events
+	pub event_count: u128,
+	/// The version of the Starknet protocol used when creating this block
+	pub protocol_version: u8,
+	/// l1 gas price for this block
+	pub l1_gas_price: ResourcePrice,
+	/// Extraneous data that might be useful for running transactions
+	pub extra_data: Option<U256>,
+}
+
 fn display_block_import<B: BlockT, C>(client: Arc<C>) -> impl Future<Output = ()>
 where
 	C: UsageProvider<B> + HeaderMetadata<B> + BlockchainEvents<B>,
@@ -159,19 +187,65 @@ where
 			// // let mut found;
 			println!("ITEM IN DIGEST :");
 			let mut nb = 0;
+			let mut starknet_block: Vec<u8>;
 			for item in digest {
 				println!("item {} : ", nb);
 				nb += 1;
 				// 	let log: std::option::Option<T> = log.try_to(digest_item_id);
 				match (item) {
-					(DigestItem::Consensus(cons, block)) => println!("log = {:?}", block),
+					(DigestItem::Consensus(MADARA_ENGINE_ID, block)) => {
+						println!("log = {:?}", block);
+						starknet_block = block;
+					},
 					_ => {},
 				}
 			}
 
+			let parent_block_hash = StarkHash(
+				starknet_block[0..32].try_into().expect("Failed to parse parent_block_hash"),
+			);
+			let block_number = u64::from_be_starknet_block(
+				starknet_block[32..40].try_into().expect("Failed to parse block_number"),
+			);
+			let sequencer_address = StarkHash(
+				starknet_block[40..72].try_into().expect("Failed to parse sequencer_address"),
+			);
+			let block_timestamp = u64::from_be_starknet_block(
+				starknet_block[72..80].try_into().expect("Failed to parse block_timestamp"),
+			);
+			let transaction_count = u128::from_be_starknet_block(
+				starknet_block[80..96].try_into().expect("Failed to parse transaction_count"),
+			);
+			let event_count = u128::from_be_starknet_block(
+				starknet_block[96..112].try_into().expect("Failed to parse event_count"),
+			);
+			let protocol_version = starknet_block[112];
+			let price_in_strk = Some(u64::from_be_bytes(
+				bytes[114..122].try_into().expect("Failed to parse price_in_strk"),
+			));
+			let price_in_wei = u128::from_be_bytes(
+				bytes[122..138].try_into().expect("Failed to parse price_in_wei"),
+			);
+
+			let l1_gas_price = ResourcePrice { price_in_strk, price_in_wei };
+			let extra_data = None;
+
+			let mut header = Header {
+				parent_block_hash,
+				block_number,
+				sequencer_address,
+				block_timestamp,
+				transaction_count,
+				event_count,
+				protocol_version,
+				l1_gas_price,
+				extra_data,
+			};
+
+			println!("HEADER : {:#?}", header);
 			// let mut blockoss = found.ok_or(Err({}));
 			// println!("blockoss = {:#?}", blockoss);
-			// hash = block hash extrait du digest
+			// compute hash
 
 			info!(
 				target: "substrate",
