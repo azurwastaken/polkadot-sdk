@@ -19,6 +19,7 @@
 //! Console informant. Prints sync progress and block events. Runs on the calling thread.
 
 use ansi_term::Colour;
+use ethers::types::{I256, U256};
 use futures::prelude::*;
 use futures_timer::Delay;
 use log::{debug, info, trace};
@@ -104,6 +105,8 @@ pub struct ResourcePrice {
 	/// The price of one unit of the given resource, denominated in wei
 	pub price_in_wei: u128,
 }
+
+#[derive(Clone, Debug)]
 pub struct StarknetHeader {
 	/// The hash of this block’s parent.
 	pub parent_block_hash: StarkHash,
@@ -195,7 +198,7 @@ where
 				match (item) {
 					(DigestItem::Consensus(MADARA_ENGINE_ID, block)) => {
 						println!("log = {:?}", block);
-						starknet_block = block;
+						starknet_block = block.to_vec();
 					},
 					_ => {},
 				}
@@ -221,10 +224,10 @@ where
 			);
 			let protocol_version = starknet_block[112];
 			let price_in_strk = Some(u64::from_be_bytes(
-				bytes[114..122].try_into().expect("Failed to parse price_in_strk"),
+				starknet_block[114..122].try_into().expect("Failed to parse price_in_strk"),
 			));
 			let price_in_wei = u128::from_be_bytes(
-				bytes[122..138].try_into().expect("Failed to parse price_in_wei"),
+				starknet_block[122..138].try_into().expect("Failed to parse price_in_wei"),
 			);
 
 			let l1_gas_price = ResourcePrice { price_in_strk, price_in_wei };
