@@ -204,19 +204,19 @@ where
 			let parent_block_hash = StarkHash(
 				starknet_block[0..32].try_into().expect("Failed to parse parent_block_hash"),
 			);
-			let block_number = u64::from_be_starknet_block(
+			let block_number = u64::from_be_bytes(
 				starknet_block[32..40].try_into().expect("Failed to parse block_number"),
 			);
 			let sequencer_address = StarkHash(
 				starknet_block[40..72].try_into().expect("Failed to parse sequencer_address"),
 			);
-			let block_timestamp = u64::from_be_starknet_block(
+			let block_timestamp = u64::from_be_bytes(
 				starknet_block[72..80].try_into().expect("Failed to parse block_timestamp"),
 			);
-			let transaction_count = u128::from_be_starknet_block(
+			let transaction_count = u128::from_be_bytes(
 				starknet_block[80..96].try_into().expect("Failed to parse transaction_count"),
 			);
-			let event_count = u128::from_be_starknet_block(
+			let event_count = u128::from_be_bytes(
 				starknet_block[96..112].try_into().expect("Failed to parse event_count"),
 			);
 			let protocol_version = starknet_block[112];
