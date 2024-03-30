@@ -19,7 +19,6 @@
 //! Console informant. Prints sync progress and block events. Runs on the calling thread.
 
 use ansi_term::Colour;
-use ethers::types::{I256, U256};
 use futures::prelude::*;
 use futures_timer::Delay;
 use log::{debug, info, trace};
@@ -27,6 +26,7 @@ use sc_client_api::{BlockchainEvents, UsageProvider};
 use sc_network::NetworkStatusProvider;
 use sc_network_common::sync::SyncStatusProvider;
 use sp_blockchain::HeaderMetadata;
+use sp_core::{I256, U256};
 use sp_runtime::{
 	generic::{Digest, OpaqueDigestItemId},
 	traits::{Block as BlockT, Header},
