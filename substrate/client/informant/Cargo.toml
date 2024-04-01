@@ -22,4 +22,5 @@ sc-network-common = { path = "../network/common" }
 sc-network = { path = "../network" }
 sp-blockchain = { path = "../../primitives/blockchain" }
 sp-runtime = { path = "../../primitives/runtime" }
-ethers = { git = "https://github.com/gakonst/ethers-rs", rev = "f0e5b194f09c533feb10d1a686ddb9e5946ec107" }
+sp-core = { path = "../../primitives/core" }
+
