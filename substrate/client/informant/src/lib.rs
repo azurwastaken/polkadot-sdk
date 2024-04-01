@@ -271,13 +271,13 @@ where
 			// compute hash
 			let data: &[FieldElement] = &[
 				block_number.into(),
-				FieldElement::from_bytes_be(&sequencer_address.0),
+				FieldElement::from_bytes_be(&sequencer_address.0).expect("Failed to conv 1"),
 				block_timestamp.into(),
 				transaction_count.into(),
 				event_count.into(),
 				protocol_version.into(),
 				FieldElement::ZERO,
-				FieldElement::from_bytes_be(&parent_block_hash.0),
+				FieldElement::from_bytes_be(&parent_block_hash.0).expect("Failed to conv 2"),
 			];
 			// h(
 			// 	block_number,
