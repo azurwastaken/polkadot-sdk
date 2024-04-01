@@ -192,7 +192,7 @@ where
 			// // let mut found;
 			println!("ITEM IN DIGEST :");
 			let mut nb = 0;
-			let mut starknet_block: Vec<u8> = [];
+			let mut starknet_block: Vec<u8> = vec![];
 			for item in digest {
 				println!("item {} : ", nb);
 				nb += 1;
