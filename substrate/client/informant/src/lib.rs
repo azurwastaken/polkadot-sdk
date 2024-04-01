@@ -238,7 +238,7 @@ where
 			let event_count = u128::from_le_bytes(
 				starknet_block[161..177].try_into().expect("Failed to parse event_count"),
 			);
-			let transaction_commitment = StarkHash(
+			let event_commitment = StarkHash(
 				starknet_block[177..209].try_into().expect("Failed to parse sequencer_address"),
 			);
 			let protocol_version = starknet_block[209];
