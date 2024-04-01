@@ -284,7 +284,7 @@ where
 			];
 
 			let block_hash = starknet_core::crypto::compute_hash_on_elements(data);
-			println!("KURWA HASH : {:#?}", block_hash);
+			println!("KURWA HASH SRSLY : {:#?}", block_hash);
 			// h(
 			// 	block_number,
 			// 	global_state_root,
