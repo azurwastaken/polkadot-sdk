@@ -289,7 +289,7 @@ where
 				header.transaction_count.into(),
 				header.event_count.into(),
 				header.protocol_version.into(),
-				Felt252Wrapper::ZERO,
+				FieldElement::ZERO,
 				FieldElement::from_bytes_be(&header.parent_block_hash.0).expect("Failed to conv 3"),
 			];
 
