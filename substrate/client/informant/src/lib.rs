@@ -255,13 +255,13 @@ where
 			let mut header = StarknetHeader {
 				parent_block_hash: parent_block_hash.clone(),
 				block_number,
-				global_state_root,
+				global_state_root: global_state_root.clone(),
 				sequencer_address: sequencer_address.clone(),
 				block_timestamp,
 				transaction_count,
-				transaction_commitment,
+				transaction_commitment: transaction_commitment.clone(),
 				event_count,
-				event_commitment,
+				event_commitment: event_commitment.clone(),
 				protocol_version,
 				l1_gas_price,
 				extra_data,
@@ -271,13 +271,16 @@ where
 			// compute hash
 			let data: &[FieldElement] = &[
 				block_number.into(),
-				FieldElement::from_bytes_be(&sequencer_address.0).expect("Failed to conv 1"),
+				FieldElement::from_bytes_be(&global_state_root.0).expect("Failed to conv 1"),
+				FieldElement::from_bytes_be(&sequencer_address.0).expect("Failed to conv 2"),
 				block_timestamp.into(),
 				transaction_count.into(),
+				FieldElement::from_bytes_be(&transaction_commitment.0).expect("Failed to conv 2"),
 				event_count.into(),
-				protocol_version.into(),
+				FieldElement::from_bytes_be(&event_commitment.0).expect("Failed to conv 2"),
 				FieldElement::ZERO,
-				FieldElement::from_bytes_be(&parent_block_hash.0).expect("Failed to conv 2"),
+				FieldElement::ZERO,
+				FieldElement::from_bytes_be(&parent_block_hash.0).expect("Failed to conv 3"),
 			];
 
 			let block_hash = starknet_core::crypto::compute_hash_on_elements(data);
