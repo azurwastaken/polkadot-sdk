@@ -267,7 +267,7 @@ where
 				extra_data,
 			};
 
-			println!("HEADER : {:#?}", header);
+			// println!("HEADER : {:#?}", header);
 			// compute hash
 			let data: &[FieldElement] = &[
 				block_number.into(),
@@ -279,9 +279,10 @@ where
 				event_count.into(),
 				FieldElement::from_bytes_be(&event_commitment.0).expect("Failed to conv 2"),
 				FieldElement::ZERO,
-				FieldElement::ZERO,
 				FieldElement::from_bytes_be(&parent_block_hash.0).expect("Failed to conv 3"),
 			];
+
+			println!("KURWA DATAS : {:#?}", data);
 
 			let block_hash = starknet_core::crypto::compute_hash_on_elements(data);
 			println!("KURWA HASH SRSLY : {:#?}", block_hash);
