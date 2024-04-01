@@ -271,7 +271,7 @@ where
 			// compute hash
 			let data: &[FieldElement] = &[
 				block_number.into(),
-				sequencer_address.0 .0.into(),
+				sequencer_address.0.into(),
 				block_timestamp.into(),
 				transaction_count.into(),
 				event_count.into(),
