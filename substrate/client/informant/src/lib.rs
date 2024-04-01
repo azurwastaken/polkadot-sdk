@@ -252,20 +252,20 @@ where
 			let l1_gas_price = ResourcePrice { price_in_strk, price_in_wei };
 			let extra_data = None;
 
-			// let mut header = StarknetHeader {
-			// 	parent_block_hash,
-			// 	block_number,
-			// 	global_state_root,
-			// 	sequencer_address,
-			// 	block_timestamp,
-			// 	transaction_count,
-			// 	transaction_commitment,
-			// 	event_count,
-			// 	event_commitment,
-			// 	protocol_version,
-			// 	l1_gas_price,
-			// 	extra_data,
-			// };
+			let mut header = StarknetHeader {
+				parent_block_hash: parent_block_hash.clone(),
+				block_number,
+				global_state_root,
+				sequencer_address: sequencer_address.clone(),
+				block_timestamp,
+				transaction_count,
+				transaction_commitment,
+				event_count,
+				event_commitment,
+				protocol_version,
+				l1_gas_price,
+				extra_data,
+			};
 
 			println!("HEADER : {:#?}", header);
 			// compute hash
