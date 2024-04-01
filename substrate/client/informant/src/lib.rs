@@ -32,8 +32,8 @@ use sp_runtime::{
 	traits::{Block as BlockT, Header},
 	ConsensusEngineId, DigestItem,
 };
+use starknet_ff::FieldElement;
 use std::{collections::VecDeque, fmt::Display, sync::Arc, time::Duration};
-
 mod display;
 
 /// Creates a stream that returns a new value every `duration`.
@@ -268,9 +268,30 @@ where
 			};
 
 			println!("HEADER : {:#?}", header);
-			// let mut blockoss = found.ok_or(Err({}));
-			// println!("blockoss = {:#?}", blockoss);
 			// compute hash
+			let data: &[FieldElement] = &[
+				block_number.into(),
+				sequencer_address.0 .0.into(),
+				block_timestamp.into(),
+				transaction_count.into(),
+				event_count.into(),
+				protocol_version.into(),
+				FieldElement::ZERO,
+				parent_block_hash.into(),
+			];
+			// h(
+			// 	block_number,
+			// 	global_state_root,
+			// 	sequencer_address,
+			// 	block_timestamp,
+			// 	transaction_count,
+			// 	transaction_commitment,
+			// 	event_count,
+			// 	event_commitment,
+			// 	0,
+			// 	0,
+			// 	parent_block_hash
+			// )
 
 			info!(
 				target: "substrate",
