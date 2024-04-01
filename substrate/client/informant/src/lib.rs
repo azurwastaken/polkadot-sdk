@@ -271,13 +271,13 @@ where
 			// compute hash
 			let data: &[FieldElement] = &[
 				block_number.into(),
-				sequencer_address.0.into(),
+				FieldElement::from_bytes_be(&sequencer_address.0),
 				block_timestamp.into(),
 				transaction_count.into(),
 				event_count.into(),
 				protocol_version.into(),
 				FieldElement::ZERO,
-				parent_block_hash.into(),
+				FieldElement::from_bytes_be(&parent_block_hash.0),
 			];
 			// h(
 			// 	block_number,
