@@ -115,6 +115,8 @@ pub struct StarknetHeader {
 	/// The number (height) of this block.
 	pub block_number: u64,
 	/// The Starknet address of the sequencer who created this block.
+	pub global_state_root: StarkHash,
+	/// The Starknet address of the sequencer who created this block.
 	pub sequencer_address: StarkHash,
 	/// The time the sequencer created this block before executing transactions
 	pub block_timestamp: u64,
@@ -215,21 +217,24 @@ where
 			let sequencer_address = StarkHash(
 				starknet_block[41..73].try_into().expect("Failed to parse sequencer_address"),
 			);
+			let sequencer_address = StarkHash(
+				starknet_block[73..81].try_into().expect("Failed to parse sequencer_address"),
+			);
 			let block_timestamp = u64::from_le_bytes(
-				starknet_block[73..81].try_into().expect("Failed to parse block_timestamp"),
+				starknet_block[81..97].try_into().expect("Failed to parse block_timestamp"),
 			);
 			let transaction_count = u128::from_le_bytes(
-				starknet_block[81..97].try_into().expect("Failed to parse transaction_count"),
+				starknet_block[97..113].try_into().expect("Failed to parse transaction_count"),
 			);
 			let event_count = u128::from_le_bytes(
-				starknet_block[97..113].try_into().expect("Failed to parse event_count"),
+				starknet_block[113..119].try_into().expect("Failed to parse event_count"),
 			);
-			let protocol_version = starknet_block[113];
+			let protocol_version = starknet_block[119];
 			let price_in_strk = Some(u64::from_le_bytes(
-				starknet_block[115..123].try_into().expect("Failed to parse price_in_strk"),
+				starknet_block[120..128].try_into().expect("Failed to parse price_in_strk"),
 			));
 			let price_in_wei = u128::from_le_bytes(
-				starknet_block[123..139].try_into().expect("Failed to parse price_in_wei"),
+				starknet_block[128..144].try_into().expect("Failed to parse price_in_wei"),
 			);
 
 			let l1_gas_price = ResourcePrice { price_in_strk, price_in_wei };
