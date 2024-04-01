@@ -284,19 +284,21 @@ where
 
 			let data_as_madara: &[FieldElement] = &[
 				header.block_number.into(),
-				header.sequencer_address.0 .0.into(),
+				FieldElement::from_bytes_be(&header.sequencer_address.0).expect("Failed to conv 2"),
 				header.block_timestamp.into(),
 				header.transaction_count.into(),
 				header.event_count.into(),
 				header.protocol_version.into(),
 				Felt252Wrapper::ZERO,
-				header.parent_block_hash.into(),
+				FieldElement::from_bytes_be(&header.parent_block_hash.0).expect("Failed to conv 3"),
 			];
 
 			println!("KURWA DATAS : {:#?}", data);
 
 			let block_hash = starknet_core::crypto::compute_hash_on_elements(data);
 			println!("KURWA HASH SRSLY : {:#?}", block_hash);
+
+			println!("MADARA DATAS : {:#?}", data_as_madara);
 
 			let madara_hash = starknet_core::crypto::compute_hash_on_elements(data_as_madara);
 			println!("MADARA HASH SRSLY : {:#?}", madara_hash);
