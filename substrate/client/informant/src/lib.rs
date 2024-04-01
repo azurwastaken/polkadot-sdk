@@ -209,26 +209,26 @@ where
 			let parent_block_hash = StarkHash(
 				starknet_block[1..33].try_into().expect("Failed to parse parent_block_hash"),
 			);
-			let block_number = u64::from_be_bytes(
+			let block_number = u64::from_le_bytes(
 				starknet_block[33..41].try_into().expect("Failed to parse block_number"),
 			);
 			let sequencer_address = StarkHash(
 				starknet_block[41..73].try_into().expect("Failed to parse sequencer_address"),
 			);
-			let block_timestamp = u64::from_be_bytes(
+			let block_timestamp = u64::from_le_bytes(
 				starknet_block[73..81].try_into().expect("Failed to parse block_timestamp"),
 			);
-			let transaction_count = u128::from_be_bytes(
+			let transaction_count = u128::from_le_bytes(
 				starknet_block[81..97].try_into().expect("Failed to parse transaction_count"),
 			);
-			let event_count = u128::from_be_bytes(
+			let event_count = u128::from_le_bytes(
 				starknet_block[97..113].try_into().expect("Failed to parse event_count"),
 			);
 			let protocol_version = starknet_block[113];
-			let price_in_strk = Some(u64::from_be_bytes(
+			let price_in_strk = Some(u64::from_le_bytes(
 				starknet_block[115..123].try_into().expect("Failed to parse price_in_strk"),
 			));
-			let price_in_wei = u128::from_be_bytes(
+			let price_in_wei = u128::from_le_bytes(
 				starknet_block[123..139].try_into().expect("Failed to parse price_in_wei"),
 			);
 
