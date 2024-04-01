@@ -279,6 +279,9 @@ where
 				FieldElement::ZERO,
 				FieldElement::from_bytes_be(&parent_block_hash.0).expect("Failed to conv 2"),
 			];
+
+			let block_hash = starknet_crypto::compute_hash_on_elements(data);
+			println!("KURWA HASH : {:#?}", block_hash);
 			// h(
 			// 	block_number,
 			// 	global_state_root,
