@@ -214,7 +214,7 @@ where
 			let block_number = u64::from_le_bytes(
 				starknet_block[33..41].try_into().expect("Failed to parse block_number"),
 			);
-			let sequencer_address = StarkHash(
+			let global_state_root = StarkHash(
 				starknet_block[41..73].try_into().expect("Failed to parse sequencer_address"),
 			);
 			let sequencer_address = StarkHash(
@@ -243,6 +243,7 @@ where
 			let mut header = StarknetHeader {
 				parent_block_hash,
 				block_number,
+				global_state_root,
 				sequencer_address,
 				block_timestamp,
 				transaction_count,
