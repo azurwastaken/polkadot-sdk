@@ -22,6 +22,7 @@ use ansi_term::Colour;
 use futures::prelude::*;
 use futures_timer::Delay;
 use log::{debug, info, trace};
+use mp_block::Block as StarknetBlock;
 use sc_client_api::{BlockchainEvents, UsageProvider};
 use sc_network::NetworkStatusProvider;
 use sc_network_common::sync::SyncStatusProvider;
@@ -34,6 +35,7 @@ use sp_runtime::{
 };
 use starknet_ff::FieldElement;
 use std::{collections::VecDeque, fmt::Display, sync::Arc, time::Duration};
+
 mod display;
 
 /// Creates a stream that returns a new value every `duration`.
@@ -98,46 +100,6 @@ where
 	};
 }
 
-#[derive(Clone, Debug)]
-pub struct StarkHash(pub [u8; 32]);
-#[derive(Clone, Debug)]
-pub struct ResourcePrice {
-	/// The price of one unit of the given resource, denominated in fri (10^-18 strk)
-	pub price_in_strk: Option<u64>,
-	/// The price of one unit of the given resource, denominated in wei
-	pub price_in_wei: u128,
-}
-
-#[derive(Clone, Debug)]
-pub struct StarknetHeader {
-	/// The hash of this block’s parent.
-	pub parent_block_hash: StarkHash,
-	/// The number (height) of this block.
-	pub block_number: u64,
-	/// The state commitment after the block.
-	pub global_state_root: StarkHash,
-	/// The Starknet address of the sequencer who created this block.
-	pub sequencer_address: StarkHash,
-	/// The time the sequencer created this block before executing transactions
-	pub block_timestamp: u64,
-	/// The number of transactions in a block
-	pub transaction_count: u128,
-	/// The state commitment after the block.
-	pub transaction_commitment: StarkHash,
-	/// The number of events
-	pub event_count: u128,
-	/// The state commitment after the block.
-	pub event_commitment: StarkHash,
-	/// l1 gas price for this block
-	pub l1_gas_price: ResourcePrice,
-	/// l1 gas price for this block
-	// pub l1_data_gas_price: ResourcePrice,
-	/// The version of the Starknet protocol used when creating this block
-	pub protocol_version: u8,
-	/// Extraneous data that might be useful for running transactions
-	pub extra_data: Option<U256>,
-}
-
 fn display_block_import<B: BlockT, C>(client: Arc<C>) -> impl Future<Output = ()>
 where
 	C: UsageProvider<B> + HeaderMetadata<B> + BlockchainEvents<B>,
@@ -198,124 +160,23 @@ where
 			// // refaire la fonction find_starknet_block de madara
 			// let mut digest_item_id = OpaqueDigestItemId::Consensus(&MADARA_ENGINE_ID);
 			// // let mut found;
-			println!("ITEM IN DIGEST :");
+
+			println! {"DIGEST : {:#?}",digest};
+			// println!("ITEM IN DIGEST :");
 			let mut nb = 0;
-			let mut starknet_block: Vec<u8> = vec![];
+			let mut starknet_block: StarknetBlock;
 			for item in digest {
-				println!("item {} : ", nb);
+				// println!("item {} : ", nb);
 				nb += 1;
 				// 	let log: std::option::Option<T> = log.try_to(digest_item_id);
 				match (item) {
 					(DigestItem::Consensus(MADARA_ENGINE_ID, block)) => {
 						println!("log = {:?}", block);
-						starknet_block = block.to_vec();
+						starknet_block;
 					},
 					_ => {},
 				}
 			}
-
-			let parent_block_hash = StarkHash(
-				starknet_block[1..33].try_into().expect("Failed to parse parent_block_hash"),
-			);
-			let block_number = u64::from_le_bytes(
-				starknet_block[33..41].try_into().expect("Failed to parse block_number"),
-			);
-			let global_state_root = StarkHash(
-				starknet_block[41..73].try_into().expect("Failed to parse sequencer_address"),
-			);
-			let sequencer_address = StarkHash(
-				starknet_block[73..105].try_into().expect("Failed to parse sequencer_address"),
-			);
-			let block_timestamp = u64::from_le_bytes(
-				starknet_block[105..113].try_into().expect("Failed to parse block_timestamp"),
-			);
-			let transaction_count = u128::from_le_bytes(
-				starknet_block[113..129].try_into().expect("Failed to parse transaction_count"),
-			);
-			let transaction_commitment = StarkHash(
-				starknet_block[129..161].try_into().expect("Failed to parse sequencer_address"),
-			);
-			let event_count = u128::from_le_bytes(
-				starknet_block[161..177].try_into().expect("Failed to parse event_count"),
-			);
-			let event_commitment = StarkHash(
-				starknet_block[177..209].try_into().expect("Failed to parse sequencer_address"),
-			);
-			let protocol_version = starknet_block[209];
-			let price_in_strk = Some(u64::from_le_bytes(
-				starknet_block[211..219].try_into().expect("Failed to parse price_in_strk"),
-			));
-			let price_in_wei = u128::from_le_bytes(
-				starknet_block[219..235].try_into().expect("Failed to parse price_in_wei"),
-			);
-
-			let l1_gas_price = ResourcePrice { price_in_strk, price_in_wei };
-			let extra_data = None;
-
-			let mut header = StarknetHeader {
-				parent_block_hash: parent_block_hash.clone(),
-				block_number,
-				global_state_root: global_state_root.clone(),
-				sequencer_address: sequencer_address.clone(),
-				block_timestamp,
-				transaction_count,
-				transaction_commitment: transaction_commitment.clone(),
-				event_count,
-				event_commitment: event_commitment.clone(),
-				protocol_version,
-				l1_gas_price,
-				extra_data,
-			};
-
-			// println!("HEADER : {:#?}", header);
-			// compute hash
-			let data: &[FieldElement] = &[
-				block_number.into(),
-				FieldElement::from_bytes_be(&global_state_root.0).expect("Failed to conv 1"),
-				FieldElement::from_bytes_be(&sequencer_address.0).expect("Failed to conv 2"),
-				block_timestamp.into(),
-				transaction_count.into(),
-				FieldElement::from_bytes_be(&transaction_commitment.0).expect("Failed to conv 2"),
-				event_count.into(),
-				FieldElement::from_bytes_be(&event_commitment.0).expect("Failed to conv 2"),
-				FieldElement::ZERO,
-				FieldElement::from_bytes_be(&parent_block_hash.0).expect("Failed to conv 3"),
-			];
-
-			let data_as_madara: &[FieldElement] = &[
-				header.block_number.into(),
-				FieldElement::from_bytes_be(&header.sequencer_address.0).expect("Failed to conv 2"),
-				header.block_timestamp.into(),
-				header.transaction_count.into(),
-				header.event_count.into(),
-				header.protocol_version.into(),
-				FieldElement::ZERO,
-				FieldElement::from_bytes_be(&header.parent_block_hash.0).expect("Failed to conv 3"),
-			];
-
-			println!("KURWA DATAS : {:#?}", data);
-
-			let block_hash = starknet_core::crypto::compute_hash_on_elements(data);
-			println!("KURWA HASH SRSLY : {:#?}", block_hash);
-
-			println!("MADARA DATAS : {:#?}", data_as_madara);
-
-			let madara_hash = starknet_core::crypto::compute_hash_on_elements(data_as_madara);
-			println!("MADARA HASH SRSLY : {:#?}", madara_hash);
-			// h(
-			// 	block_number,
-			// 	global_state_root,
-			// 	sequencer_address,
-			// 	block_timestamp,
-			// 	transaction_count,
-			// 	transaction_commitment,
-			// 	event_count,
-			// 	event_commitment,
-			// 	0,
-			// 	0,
-			// 	parent_block_hash
-			// )
-
 			info!(
 				target: "substrate",
 				"✨ Imported #{} ({})",
