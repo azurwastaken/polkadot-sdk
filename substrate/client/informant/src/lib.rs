@@ -22,7 +22,6 @@ use ansi_term::Colour;
 use futures::prelude::*;
 use futures_timer::Delay;
 use log::{debug, info, trace};
-use mp_block::Block as StarknetBlock;
 use sc_client_api::{BlockchainEvents, UsageProvider};
 use sc_network::NetworkStatusProvider;
 use sc_network_common::sync::SyncStatusProvider;
@@ -35,7 +34,6 @@ use sp_runtime::{
 };
 use starknet_ff::FieldElement;
 use std::{collections::VecDeque, fmt::Display, sync::Arc, time::Duration};
-
 mod display;
 
 /// Creates a stream that returns a new value every `duration`.
@@ -109,6 +107,7 @@ pub struct ResourcePrice {
 	/// The price of one unit of the given resource, denominated in wei
 	pub price_in_wei: u128,
 }
+
 #[derive(Clone, Debug)]
 pub struct StarknetHeader {
 	/// The hash of this block’s parent.
@@ -199,19 +198,17 @@ where
 			// // refaire la fonction find_starknet_block de madara
 			// let mut digest_item_id = OpaqueDigestItemId::Consensus(&MADARA_ENGINE_ID);
 			// // let mut found;
-
-			println! {"DIGEST : {:#?}",digest};
-			// println!("ITEM IN DIGEST :");
+			println!("ITEM IN DIGEST :");
 			let mut nb = 0;
-			let mut starknet_block: StarknetBlock;
+			let mut starknet_block: Vec<u8> = vec![];
 			for item in digest {
-				// println!("item {} : ", nb);
+				println!("item {} : ", nb);
 				nb += 1;
 				// 	let log: std::option::Option<T> = log.try_to(digest_item_id);
 				match (item) {
 					(DigestItem::Consensus(MADARA_ENGINE_ID, block)) => {
 						println!("log = {:?}", block);
-						starknet_block;
+						starknet_block = block.to_vec();
 					},
 					_ => {},
 				}
@@ -282,6 +279,7 @@ where
 				event_count.into(),
 				FieldElement::from_bytes_be(&event_commitment.0).expect("Failed to conv 2"),
 				FieldElement::ZERO,
+				FieldElement::ZERO,
 				FieldElement::from_bytes_be(&parent_block_hash.0).expect("Failed to conv 3"),
 			];
 
@@ -296,10 +294,10 @@ where
 				FieldElement::from_bytes_be(&header.parent_block_hash.0).expect("Failed to conv 3"),
 			];
 
-			println!("KURWA DATAS : {:#?}", data);
+			println!("DATAS : {:#?}", data);
 
 			let block_hash = starknet_core::crypto::compute_hash_on_elements(data);
-			println!("KURWA HASH SRSLY : {:#?}", block_hash);
+			println!("HASH SRSLY : {:#?}", block_hash);
 
 			println!("MADARA DATAS : {:#?}", data_as_madara);
 
