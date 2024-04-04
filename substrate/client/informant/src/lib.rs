@@ -279,7 +279,6 @@ where
 				event_count.into(),
 				FieldElement::from_bytes_be(&event_commitment.0).expect("Failed to conv 2"),
 				FieldElement::ZERO,
-				FieldElement::ZERO,
 				FieldElement::from_bytes_be(&parent_block_hash.0).expect("Failed to conv 3"),
 			];
 
@@ -294,10 +293,10 @@ where
 				FieldElement::from_bytes_be(&header.parent_block_hash.0).expect("Failed to conv 3"),
 			];
 
-			println!("DATAS : {:#?}", data);
+			println!("KURWA DATAS : {:#?}", data);
 
 			let block_hash = starknet_core::crypto::compute_hash_on_elements(data);
-			println!("HASH SRSLY : {:#?}", block_hash);
+			println!("KURWA HASH SRSLY : {:#?}", block_hash);
 
 			println!("MADARA DATAS : {:#?}", data_as_madara);
 
