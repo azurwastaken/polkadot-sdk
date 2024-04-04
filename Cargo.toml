@@ -531,4 +531,3 @@ wasmi = { opt-level = 3 }
 x25519-dalek = { opt-level = 3 }
 yamux = { opt-level = 3 }
 zeroize = { opt-level = 3 }
-mp-block = { git = "https://github.com/keep-starknet-strange/madara", default-features = false, features = ["std"], opt-level = 3}
