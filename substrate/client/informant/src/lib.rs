@@ -100,6 +100,45 @@ where
 	};
 }
 
+#[derive(Clone, Debug)]
+pub struct StarkHash(pub [u8; 32]);
+#[derive(Clone, Debug)]
+pub struct ResourcePrice {
+	/// The price of one unit of the given resource, denominated in fri (10^-18 strk)
+	pub price_in_strk: Option<u64>,
+	/// The price of one unit of the given resource, denominated in wei
+	pub price_in_wei: u128,
+}
+#[derive(Clone, Debug)]
+pub struct StarknetHeader {
+	/// The hash of this block’s parent.
+	pub parent_block_hash: StarkHash,
+	/// The number (height) of this block.
+	pub block_number: u64,
+	/// The state commitment after the block.
+	pub global_state_root: StarkHash,
+	/// The Starknet address of the sequencer who created this block.
+	pub sequencer_address: StarkHash,
+	/// The time the sequencer created this block before executing transactions
+	pub block_timestamp: u64,
+	/// The number of transactions in a block
+	pub transaction_count: u128,
+	/// The state commitment after the block.
+	pub transaction_commitment: StarkHash,
+	/// The number of events
+	pub event_count: u128,
+	/// The state commitment after the block.
+	pub event_commitment: StarkHash,
+	/// l1 gas price for this block
+	pub l1_gas_price: ResourcePrice,
+	/// l1 gas price for this block
+	// pub l1_data_gas_price: ResourcePrice,
+	/// The version of the Starknet protocol used when creating this block
+	pub protocol_version: u8,
+	/// Extraneous data that might be useful for running transactions
+	pub extra_data: Option<U256>,
+}
+
 fn display_block_import<B: BlockT, C>(client: Arc<C>) -> impl Future<Output = ()>
 where
 	C: UsageProvider<B> + HeaderMetadata<B> + BlockchainEvents<B>,
